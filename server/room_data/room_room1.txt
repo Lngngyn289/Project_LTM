@@ -1,0 +1,7 @@
+JOIN user1 0
+ADD user3 5
+MESSAGE user3 hello guys
+MESSAGE user1 hi
+LEAVE user3 5
+JOIN user3 5
+REMOVE user3 5
