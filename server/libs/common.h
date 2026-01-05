@@ -34,7 +34,7 @@ typedef struct
     int id;
     int is_online;
 
-    int chatting_partnner_id;
+    int chatting_partner_id;
 
     int friends[MAX_FRIENDS];
     int friend_count;

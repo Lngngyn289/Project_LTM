@@ -26,3 +26,4 @@
 [2024-12-23 14:19:56]  |  FILE LOG  |  User user1 sent private message to user3
 [2024-12-23 14:20:00]  |  FILE LOG  |  User user3 sent private message to user1
 [2024-12-23 14:20:10]  |  FILE LOG  |  User user1 sent private message to user3
+[2026-01-05 07:12:25]  |  FILE LOG  |  User user1 sent offline message to offline

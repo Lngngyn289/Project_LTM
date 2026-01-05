@@ -161,17 +161,17 @@ void request_private_message(int sender_id, int receiver_id)
         send_websocket_message(clients[sender_id].socket, response, strlen(response), 0);
         return;
     }
-    if (clients[sender_id].chatting_partnner_id >= 0)
+    if (clients[sender_id].chatting_partner_id >= 0)
     {
-        // printf("You are already in a private chat with %s\n", clients[clients[sender_id].chatting_partnner_id].username);
+        // printf("You are already in a private chat with %s\n", clients[clients[sender_id].chatting_partner_id].username);
         char response_with_username[BUFFER_SIZE];
-        snprintf(response_with_username, BUFFER_SIZE, "You are already in a private chat with %s", clients[clients[sender_id].chatting_partnner_id].username);
+        snprintf(response_with_username, BUFFER_SIZE, "You are already in a private chat with %s", clients[clients[sender_id].chatting_partner_id].username);
         char alert_response[BUFFER_SIZE];
         snprintf(alert_response, BUFFER_SIZE, "%d %s", STATUS_ERROR, response_with_username);
         send_websocket_message(clients[sender_id].socket, alert_response, strlen(alert_response), 0);
         return;
     }
-    else if (clients[receiver_id].chatting_partnner_id >= 0)
+    else if (clients[receiver_id].chatting_partner_id >= 0)
     {
         // printf("%s is already in a private chat\n", clients[receiver_id].username);
         char response_with_username[BUFFER_SIZE];
@@ -195,7 +195,7 @@ void request_private_message(int sender_id, int receiver_id)
 void check_chat_partnership(int sender_id, int receiver_id)
 {
     char final_response[BUFFER_SIZE];
-    if (clients[sender_id].chatting_partnner_id == receiver_id && clients[receiver_id].chatting_partnner_id == sender_id)
+    if (clients[sender_id].chatting_partner_id == receiver_id && clients[receiver_id].chatting_partner_id == sender_id)
     {
         // printf("You are already in a private chat with %s\n", clients[receiver_id].username);
         const char *response = "true";
@@ -213,8 +213,8 @@ void check_chat_partnership(int sender_id, int receiver_id)
 
 void accept_chat_request(int sender_id, int receiver_id)
 {
-    clients[sender_id].chatting_partnner_id = receiver_id;
-    clients[receiver_id].chatting_partnner_id = sender_id;
+    clients[sender_id].chatting_partner_id = receiver_id;
+    clients[receiver_id].chatting_partner_id = sender_id;
     char final_response[BUFFER_SIZE];
     const char *response = "true";
     add_response_header(final_response, CHECK_PARTNERSHIP, response, strlen(response));
@@ -224,8 +224,8 @@ void accept_chat_request(int sender_id, int receiver_id)
 
 void disconnect_chat(int sender_id, int receiver_id)
 {
-    clients[sender_id].chatting_partnner_id = -1;
-    clients[receiver_id].chatting_partnner_id = -1;
+    clients[sender_id].chatting_partner_id = -1;
+    clients[receiver_id].chatting_partner_id = -1;
     char final_response[BUFFER_SIZE];
     const char *response = "false";
     add_response_header(final_response, CHECK_PARTNERSHIP, response, strlen(response));

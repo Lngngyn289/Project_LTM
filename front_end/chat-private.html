@@ -307,7 +307,7 @@
           privateChatRequestModal.style.display = "block";
           acceptPrivateChatBtn.onclick = () => {
             const userId = sessionStorage.getItem("user_id");
-            const acceptChatMessage = encodeMessage(0x20, userId, id);
+            const acceptChatMessage = encodeMessage(0x1A, userId, id);
             socket.send(acceptChatMessage);
             privateChatRequestModal.style.display = "none";
           };
