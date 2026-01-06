@@ -576,6 +576,31 @@ void *client_handler(void *socket_desc)
       }
       break;
     }
+    case CMD_RECONNECT: // 0x1B: Reconnect
+    {
+      char userID[BUFFER_SIZE];
+      sscanf(payload, "%s", userID);
+      int reconnect_user_id = atoi(userID);
+
+      pthread_mutex_lock(&clients_mutex);
+      if (reconnect_user_id >= 0 && reconnect_user_id < MAX_CLIENTS)
+      {
+        clients[reconnect_user_id].is_online = 1;
+        clients[reconnect_user_id].socket = client_sock;
+        user_id = reconnect_user_id;
+        pthread_mutex_unlock(&clients_mutex);
+
+        log_message("User %d reconnected successfully, socket %d", reconnect_user_id, client_sock);
+        send_websocket_message(client_sock, "Reconnect successful", strlen("Reconnect successful"), 0);
+      }
+      else
+      {
+        pthread_mutex_unlock(&clients_mutex);
+        send_websocket_message(client_sock, "Reconnect failed: Invalid user ID",
+                               strlen("Reconnect failed: Invalid user ID"), 0);
+      }
+      break;
+    }
     case CMD_VIEW_ROOM_MEMBERS: // 0x17: View room members
     {
       char room_name[BUFFER_SIZE];
@@ -608,6 +633,7 @@ void *client_handler(void *socket_desc)
     }
   }
 
+  remove_client(user_id);
   log_message("Client disconnected: ID %d", user_id);
   close(client_sock);
   free(socket_desc);
@@ -619,7 +645,7 @@ const char valid_commands[] = {
     CMD_CHECK_PARTNERSHIP, CMD_DISCONNECT_CHAT, CMD_ACCEPT_CHAT, CMD_ADDFR, CMD_ACCEPT,
     CMD_DECLINE, CMD_LISTFR, CMD_CANCEL, CMD_LISTREQ, CMD_REMOVE, CMD_CREATE_ROOM, CMD_JOIN_ROOM,
     CMD_ROOM_MESSAGE, CMD_ADD_TO_ROOM, CMD_LEAVE_ROOM, CMD_REMOVE_USER, CMD_LIST_ROOMS,
-    CMD_LOAD_ROOM_MESSAGES, CMD_VIEW_ROOM_MEMBERS, CMD_LOGOUT};
+    CMD_LOAD_ROOM_MESSAGES, CMD_VIEW_ROOM_MEMBERS, CMD_LOGOUT, CMD_RECONNECT};
 
 int is_valid_request(char command, const char *payload)
 {

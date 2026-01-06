@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="./css/base.css" />
   <link rel="stylesheet" href="./css/chat.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-  <script src="./js/session-manager.js"></script>
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
@@ -80,26 +79,23 @@
         let selectedFriendOnline = false;
         const socket = new WebSocket("ws://localhost:8080");
 
-        // Initialize SessionManager to handle logout when closing tab
-        let sessionManager;
-
-        // Logout functionality
+        // Logout functionality - chỉ gửi CMD_LOGOUT khi user click nút Logout
+        // Server sẽ tự động set offline khi WebSocket disconnect
         logoutBtn.addEventListener("click", () => {
           const userId = sessionStorage.getItem("user_id");
-          if (userId) {
-            // Đánh dấu là logout thủ công để tránh logout 2 lần
-            sessionManager.initiateLogout();
+          if (userId && socket.readyState === WebSocket.OPEN) {
+            // Gửi CMD_LOGOUT = 0x14
+            const commandChar = String.fromCharCode(0x14);
+            const message = `${commandChar} ${userId} `;
+            socket.send(message);
+            console.log(`Logout message sent for user ${userId}`);
+          }
 
-            // Clear session and redirect to login
-            setTimeout(() => {
-              sessionStorage.clear();
-              window.location.href = "login.html";
-            }, 500);
-          } else {
-            // Nếu không có session, vẫn clear và redirect
+          // Clear session and redirect to login
+          setTimeout(() => {
             sessionStorage.clear();
             window.location.href = "login.html";
-          }
+          }, 300);
         });
 
         // Open modal when clicking on the add friend button
@@ -137,12 +133,15 @@
           console.log("WebSocket connected.");
           const userId = sessionStorage.getItem("user_id");
           const username = sessionStorage.getItem("user_name");
-          usernameDisplay.textContent = `${username} (ID: ${userId})`;
 
-          // Initialize SessionManager after socket is open
-          if (!sessionManager) {
-            sessionManager = new SessionManager(socket);
+          // Nếu có userId, gửi CMD_RECONNECT để set online
+          if (userId) {
+            const reconnectMessage = encodeMessage(0x1B, userId, ""); // CMD_RECONNECT = 0x1B
+            socket.send(reconnectMessage);
+            console.log(`Reconnecting user: ${username} (ID: ${userId})`);
           }
+
+          usernameDisplay.textContent = `${username} (ID: ${userId})`;
 
           if (userId) {
             const listreqMessage = encodeMessage(0x0b, userId, "");

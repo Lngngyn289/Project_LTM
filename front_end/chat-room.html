@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="./css/base.css">
     <link rel="stylesheet" href="./css/chat.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <script src="./js/session-manager.js"></script>
 </head>
 
 <script>
@@ -40,9 +39,6 @@
         const membersList = document.getElementById("members-list");
         const logoutBtn = document.getElementById("logout-btn");
 
-        // Initialize SessionManager
-        let sessionManager;
-
         function encodeMessage(commandCode, username, password) {
             const commandChar = String.fromCharCode(commandCode);
             return `${commandChar} ${username} ${password}`;
@@ -52,19 +48,23 @@
             window.location.href = "chat-private.html";
         });
 
-        // Logout functionality
+        // Logout functionality - chỉ gửi CMD_LOGOUT khi user click nút Logout
+        // Server sẽ tự động set offline khi WebSocket disconnect
         logoutBtn.addEventListener("click", () => {
             const userId = sessionStorage.getItem("user_id");
-            if (userId) {
-                // Đánh dấu là logout thủ công để tránh logout 2 lần
-                sessionManager.initiateLogout();
-
-                // Clear session and redirect to login
-                setTimeout(() => {
-                    sessionStorage.clear();
-                    window.location.href = "login.html";
-                }, 500);
+            if (userId && socket.readyState === WebSocket.OPEN) {
+                // Gửi CMD_LOGOUT = 0x14
+                const commandChar = String.fromCharCode(0x14);
+                const message = `${commandChar} ${userId} `;
+                socket.send(message);
+                console.log(`Logout message sent for user ${userId}`);
             }
+
+            // Clear session and redirect to login
+            setTimeout(() => {
+                sessionStorage.clear();
+                window.location.href = "login.html";
+            }, 300);
         });
         function getListRoomSideBar() {
             const userId = sessionStorage.getItem("user_id");
@@ -88,9 +88,11 @@
             const userId = sessionStorage.getItem("user_id");
             const username = sessionStorage.getItem("user_name");
 
-            // Initialize SessionManager after socket is open
-            if (!sessionManager) {
-                sessionManager = new SessionManager(socket);
+            // Nếu có userId, gửi CMD_RECONNECT để set online
+            if (userId) {
+                const reconnectMessage = encodeMessage(0x1B, userId, ""); // CMD_RECONNECT = 0x1B
+                socket.send(reconnectMessage);
+                console.log(`Reconnecting user: ${username} (ID: ${userId})`);
             }
 
             if (userId && username) {

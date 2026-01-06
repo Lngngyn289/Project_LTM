@@ -28,6 +28,7 @@
 #define CMD_CHECK_PARTNERSHIP 0x18  // Kiểm tra quan hệ chat
 #define CMD_DISCONNECT_CHAT 0x19    // Ngắt kết nối chat
 #define CMD_ACCEPT_CHAT 0x1A        // Chấp nhận yêu cầu chat
+#define CMD_RECONNECT 0x1B          // Reconnect và set online
 
 // Response Codes (0x21 - 0x51)
 #define RESPONSE_REGISTER 0x21     // Đăng ký thành công
