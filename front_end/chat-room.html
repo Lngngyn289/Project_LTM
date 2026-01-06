@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="./css/base.css">
     <link rel="stylesheet" href="./css/chat.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <script src="./js/session-manager.js"></script>
     <!-- <script src="./js/chat.js" defer></script> -->
 </head>
 
@@ -38,6 +39,10 @@
         const membersModal = document.getElementById("members-modal");
         const closeModalBtn = document.querySelector(".close-btn");
         const membersList = document.getElementById("members-list");
+        const logoutBtn = document.getElementById("logout-btn");
+
+        // Initialize SessionManager
+        let sessionManager;
 
         function encodeMessage(commandCode, username, password) {
             const commandChar = String.fromCharCode(commandCode);
@@ -46,6 +51,21 @@
 
         switchViewBtn.addEventListener("click", () => {
             window.location.href = "chat-private.html";
+        });
+
+        // Logout functionality
+        logoutBtn.addEventListener("click", () => {
+            const userId = sessionStorage.getItem("user_id");
+            if (userId) {
+                // Đánh dấu là logout thủ công để tránh logout 2 lần
+                sessionManager.initiateLogout();
+
+                // Clear session and redirect to login
+                setTimeout(() => {
+                    sessionStorage.clear();
+                    window.location.href = "login.html";
+                }, 500);
+            }
         });
         function getListRoomSideBar() {
             const userId = sessionStorage.getItem("user_id");
@@ -68,6 +88,12 @@
             console.log("WebSocket connected.");
             const userId = sessionStorage.getItem("user_id");
             const username = sessionStorage.getItem("user_name");
+
+            // Initialize SessionManager after socket is open
+            if (!sessionManager) {
+                sessionManager = new SessionManager(socket);
+            }
+
             if (userId && username) {
                 console.log(`User: ${username}, ID: ${userId}`);
                 usernameDisplay.textContent = `${username} (ID: ${userId})`; // Hiển thị tên người dùng
@@ -114,6 +140,15 @@
             }
 
             console.log(response);
+
+            // Check for logout response (RESPONSE_LOGOUT = 0x34 = 52)
+            if (command === 0x34) {
+                console.log("Logout successful");
+                sessionStorage.clear();
+                window.location.href = "login.html";
+                return;
+            }
+
             if (response.startsWith("error_not_creator")) {
                 // Hiển thị thông báo lỗi nếu không phải là người tạo nhóm
                 const errorMessage = response.split("error_not_creator ")[1];
@@ -405,6 +440,7 @@
             <div class="sidebar-header">
                 <h1>Username</h1> <br />
                 <button class="add-friend-btn"><i class="fas fa-user-plus"></i></button>
+                <button id="logout-btn" class="logout-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
             </div>
             <div class="room-actions">
                 <!-- Input và nút Tạo Room -->

@@ -111,7 +111,7 @@ void store_message(int sender_id, int receiver_id, const char *message)
   char sender_folder[BUFFER_SIZE], receiver_folder[BUFFER_SIZE];
   char sender_conversation_file[BUFFER_SIZE], receiver_conversation_file[BUFFER_SIZE];
   char conversation_folder[BUFFER_SIZE] = "conversation_data";
-  char conversation_file[BUFFER_SIZE], conversation_id[CONVERSATION_ID_LENGTH + 1] = {0};
+  char conversation_file[BUFFER_SIZE], conversation_id[CONVERSATION_ID_LENGTH + 2] = {0};
 
   // Ensure user_data/{username}/conversations directories exist
   snprintf(sender_folder, BUFFER_SIZE, "user_data/%s/conversations", clients[sender_id].username);
@@ -319,7 +319,7 @@ void retrieve_message(int client_sock, int sender_id, int receiver_id)
   }
 
   char sender_conversation_file[BUFFER_SIZE];
-  char conversation_id[CONVERSATION_ID_LENGTH + 1] = {0};
+  char conversation_id[CONVERSATION_ID_LENGTH + 2] = {0};
   MessageList *message_list = malloc(sizeof(MessageList));
   message_list->count = 0;
 

@@ -24,12 +24,14 @@ void login(int client_sock, const char *username, int *user_id, const char *pass
     if (strcmp(stored_password, password) == 0)
     {
       *user_id = stored_id;
+      clients[*user_id].id = stored_id;
       strncpy(clients[*user_id].username, username, BUFFER_SIZE);
+      strncpy(clients[*user_id].password, password, BUFFER_SIZE);
       clients[*user_id].is_online = 1;
       clients[*user_id].socket = client_sock;
       char response[BUFFER_SIZE];
       snprintf(response, BUFFER_SIZE, "%d %s", *user_id, username);
-      printf("sock_test : %d %d", clients[*user_id].socket, clients[*user_id].is_online);
+      printf("User logged in: ID=%d, socket=%d, is_online=%d\n", clients[*user_id].id, clients[*user_id].socket, clients[*user_id].is_online);
       send_websocket_message(client_sock, response, strlen(response), 0);
     }
     else
@@ -137,14 +139,20 @@ int load_user_name(Client *clients, int max_clients)
     fprintf(stderr, "Error: Unable to open user file.\n");
     return -1;
   }
-  for (int j = 0; j < MAX_FRIENDS; j++)
+  // Don't reset clients array here - it's already initialized in init_clients()
+  // Just initialize friend/request arrays for all clients
+  for (int j = 0; j < MAX_CLIENTS; j++)
   {
-    clients[j].id = -1;
-    clients[j].is_online = 0;
-    clients[j].username[0] = '\0';
-    clients[j].password[0] = '\0';
-    clients[j].add_friend_requests[i] = -1;
-    clients[j].friends[i] = -1;
+    for (int k = 0; k < MAX_REQUESTS; k++)
+    {
+      clients[j].add_friend_requests[k] = -1;
+    }
+    for (int k = 0; k < MAX_FRIENDS; k++)
+    {
+      clients[j].friends[k] = -1;
+    }
+    clients[j].friend_count = 0;
+    clients[j].request_count = 0;
   }
   char buffer[BUFFER_SIZE];
   while (i < max_clients && fgets(buffer, sizeof(buffer), file) != NULL)

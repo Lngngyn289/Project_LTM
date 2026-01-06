@@ -10,6 +10,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     />
+    <script src="./js/session-manager.js"></script>
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
@@ -75,11 +76,34 @@
         const friendRequestsList = document.getElementById(
           "friend-requests-list"
         );
+        const logoutBtn = document.getElementById("logout-btn");
 
         let selectedFriendUsername = null;
         let selectedFriendId = null;
         let selectedFriendOnline = false;
         const socket = new WebSocket("ws://localhost:8080");
+
+        // Initialize SessionManager to handle logout when closing tab
+        let sessionManager;
+
+        // Logout functionality
+        logoutBtn.addEventListener("click", () => {
+          const userId = sessionStorage.getItem("user_id");
+          if (userId) {
+            // Đánh dấu là logout thủ công để tránh logout 2 lần
+            sessionManager.initiateLogout();
+
+            // Clear session and redirect to login
+            setTimeout(() => {
+              sessionStorage.clear();
+              window.location.href = "login.html";
+            }, 500);
+          } else {
+            // Nếu không có session, vẫn clear và redirect
+            sessionStorage.clear();
+            window.location.href = "login.html";
+          }
+        });
 
         // Open modal when clicking on the add friend button
         document
@@ -117,6 +141,12 @@
           const userId = sessionStorage.getItem("user_id");
           const username = sessionStorage.getItem("user_name");
           usernameDisplay.textContent = `${username} (ID: ${userId})`;
+
+          // Initialize SessionManager after socket is open
+          if (!sessionManager) {
+            sessionManager = new SessionManager(socket);
+          }
+
           if (userId) {
             const listreqMessage = encodeMessage(0x0b, userId, "");
             socket.send(listreqMessage);
@@ -165,6 +195,12 @@
               break;
             case 0x26:
               modalAddFriendStatus.innerHTML = `<span style="color: green;">Friend request sent successfully!</span>`;
+              break;
+            case 0x34:
+              // RESPONSE_LOGOUT - Logout successful
+              console.log("Logout successful");
+              sessionStorage.clear();
+              window.location.href = "login.html";
               break;
             case 0x46:
               modalAddFriendStatus.innerHTML = `<span style="color: orange;">An unexpected error occurred.</span>`;
@@ -480,6 +516,9 @@
           <br />
           <button class="add-friend-btn">
             <i class="fas fa-user-plus"></i>
+          </button>
+          <button id="logout-btn" class="logout-btn" title="Logout">
+            <i class="fas fa-sign-out-alt"></i>
           </button>
         </div>
         <div class="room-actions"></div>

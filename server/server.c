@@ -40,19 +40,22 @@ void handle_log_command()
 
 int main()
 {
-  number_client = load_user_name(clients, MAX_CLIENTS);
-  for (int i = 0; i < number_client; i++)
-  {
-    printf("%d %s %s\n", clients[i].id, clients[i].username, clients[i].password);
-  }
-
   int server_sock, client_sock, *new_sock;
   struct sockaddr_in server_addr, client_addr;
   socklen_t addr_size;
 
   mkdir(BASE_DIR, 0700);           // Tạo thư mục lưu dữ liệu người dùng
   mkdir("server/room_data", 0700); // Tạo thư mục lưu dữ liệu phòng chat
+
+  // Initialize clients FIRST (set all to offline)
   init_clients();
+
+  // Then load user data from disk
+  number_client = load_user_name(clients, MAX_CLIENTS);
+  for (int i = 0; i < number_client; i++)
+  {
+    printf("%d %s %s\n", clients[i].id, clients[i].username, clients[i].password);
+  }
 
   init_rooms(); // Khởi tạo danh sách phòng
   load_next_id();

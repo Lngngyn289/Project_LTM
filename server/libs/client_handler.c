@@ -550,6 +550,32 @@ void *client_handler(void *socket_desc)
       }
       break;
     }
+    case CMD_LOGOUT: // 0x14: Logout
+    {
+      char userID[BUFFER_SIZE];
+      sscanf(payload, "%s", userID);
+      int logout_user_id = atoi(userID);
+
+      pthread_mutex_lock(&clients_mutex);
+      if (logout_user_id >= 0 && logout_user_id < MAX_CLIENTS && clients[logout_user_id].is_online)
+      {
+        clients[logout_user_id].is_online = 0;
+        clients[logout_user_id].chatting_partner_id = -1;
+        pthread_mutex_unlock(&clients_mutex);
+
+        char response[BUFFER_SIZE];
+        snprintf(response, BUFFER_SIZE, "%c Logout successful", RESPONSE_LOGOUT);
+        send_websocket_message(client_sock, response, strlen(response), 0);
+        log_message("User %d logged out successfully", logout_user_id);
+      }
+      else
+      {
+        pthread_mutex_unlock(&clients_mutex);
+        send_websocket_message(client_sock, "Logout failed: User not found or already logged out.",
+                               strlen("Logout failed: User not found or already logged out."), 0);
+      }
+      break;
+    }
     case CMD_VIEW_ROOM_MEMBERS: // 0x17: View room members
     {
       char room_name[BUFFER_SIZE];
@@ -583,7 +609,6 @@ void *client_handler(void *socket_desc)
   }
 
   log_message("Client disconnected: ID %d", user_id);
-  // remove_client(user_id);
   close(client_sock);
   free(socket_desc);
   return NULL;
@@ -594,7 +619,7 @@ const char valid_commands[] = {
     CMD_CHECK_PARTNERSHIP, CMD_DISCONNECT_CHAT, CMD_ACCEPT_CHAT, CMD_ADDFR, CMD_ACCEPT,
     CMD_DECLINE, CMD_LISTFR, CMD_CANCEL, CMD_LISTREQ, CMD_REMOVE, CMD_CREATE_ROOM, CMD_JOIN_ROOM,
     CMD_ROOM_MESSAGE, CMD_ADD_TO_ROOM, CMD_LEAVE_ROOM, CMD_REMOVE_USER, CMD_LIST_ROOMS,
-    CMD_LOAD_ROOM_MESSAGES, CMD_VIEW_ROOM_MEMBERS};
+    CMD_LOAD_ROOM_MESSAGES, CMD_VIEW_ROOM_MEMBERS, CMD_LOGOUT};
 
 int is_valid_request(char command, const char *payload)
 {
@@ -673,6 +698,7 @@ void init_clients()
     clients[i].socket = -1;
     clients[i].chatting_partner_id = -1;
     clients[i].is_online = 0;
+    clients[i].id = -1;
   }
 }
 
