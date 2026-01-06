@@ -517,6 +517,7 @@ int remove_user_from_room(int room_id, int remover_id, int user_id_to_remove)
 //     pthread_mutex_unlock(&rooms_mutex);
 //     return 0; // Gửi thất bại
 // }
+
 int room_message(int room_id, int sender_id, const char *message, int client_sock)
 {
   pthread_mutex_lock(&rooms_mutex);

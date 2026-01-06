@@ -28,28 +28,27 @@
 
 typedef struct
 {
-    int socket;
-    char username[BUFFER_SIZE];
-    char password[BUFFER_SIZE];
-    int id;
-    int is_online;
+  int socket;
+  char username[BUFFER_SIZE];
+  char password[BUFFER_SIZE];
+  int id;
+  int is_online;
+  int chatting_partner_id;
 
-    int chatting_partner_id;
+  int friends[MAX_FRIENDS];
+  int friend_count;
 
-    int friends[MAX_FRIENDS];
-    int friend_count;
-
-    int add_friend_requests[MAX_REQUESTS];
-    int request_count;
+  int add_friend_requests[MAX_REQUESTS];
+  int request_count;
 } Client;
 
 typedef struct
 {
-    int id;
-    int creator_id;
-    char name[BUFFER_SIZE];
-    int members[MAX_CLIENTS];
-    int member_count;
+  int id;
+  int creator_id;
+  char name[BUFFER_SIZE];
+  int members[MAX_CLIENTS];
+  int member_count;
 
 } ChatRoom;
 
