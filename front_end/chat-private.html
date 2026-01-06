@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Private Chat</title>
-    <link rel="stylesheet" href="./css/base.css" />
-    <link rel="stylesheet" href="./css/chat.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-    />
-    <script src="./js/session-manager.js"></script>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Private Chat - Chat Application</title>
+  <link rel="stylesheet" href="./css/base.css" />
+  <link rel="stylesheet" href="./css/chat.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <script src="./js/session-manager.js"></script>
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
@@ -513,96 +510,82 @@
       <div class="sidebar">
         <div class="sidebar-header">
           <h1>Username</h1>
-          <br />
-          <button class="add-friend-btn">
-            <i class="fas fa-user-plus"></i>
-          </button>
-          <button id="logout-btn" class="logout-btn" title="Logout">
-            <i class="fas fa-sign-out-alt"></i>
-          </button>
-        </div>
-        <div class="room-actions"></div>
-        <button id="switch-to-group-view">Switch To Group View</button>
-
-        <!-- Quản lý lời mời kết bạn -->
-        <div class="friend-requests">
-          <h2>Friend Requests</h2>
-          <div id="friend-requests-list">
-            <!-- Lời mời kết bạn sẽ được thêm vào đây -->
-          </div>
-        </div>
-
-        <!-- Danh sách bạn bè -->
-        <h2>Friends</h2>
-        <h3>Online Friends</h3>
-        <div class="chat-list" id="online-friend-list">
-          <!-- Online friends will be dynamically added here -->
-        </div>
-        <h3>Offline Friends</h3>
-        <div class="chat-list" id="offline-friend-list">
-          <!-- Offline friends will be dynamically added here -->
-        </div>
-      </div>
-
-      <!-- Private Chat Request Modal -->
-      <div id="privateChatRequestModal" class="modal">
-        <div class="modal-content">
-          <span class="close">&times;</span>
-          <h2 id="private-chat-request-text"></h2>
-          <button id="accept-private-chat-btn">Accept</button>
-          <button id="deny-private-chat-btn">Deny</button>
-        </div>
-      </div>
-      <!-- Friend Request Modal -->
-      <div id="friendRequestModal" class="modal">
-        <div class="modal-content">
-          <span class="close">&times;</span>
-          <h2>Send Friend Request</h2>
-          <input
-            type="number"
-            id="modal-add-friend-input"
-            placeholder="Enter User ID to send friend request"
-          />
-          <button class="send-btn" id="modal-add-friend-btn">
-            Send Request
-          </button>
-          <div id="modal-add-friend-status"></div>
-        </div>
-      </div>
-      <!-- Chat Section -->
-      <div class="chat">
-        <div class="chat-header">
-          <h3 id="room-name">Choose a friend to chat with</h3>
-        </div>
-        <div class="chat-body" id="chat-body">
-          <!-- Chat messages will be dynamically added here -->
-        </div>
-        <div class="chat-footer">
-          <textarea
-            placeholder="Type a message..."
-            id="message-input"
-            style="display: none"
-          ></textarea>
-          <button class="send-btn" id="send-btn" style="display: none">
-            <i class="fas fa-paper-plane"></i>
-          </button>
-          <button class="dis-btn" id="disconnect-btn" style="display: none">
-            Disconnect
-          </button>
-          <button
-            class="send-btn"
-            id="request-private-chat-btn"
-            style="display: none"
-          >
-            Request Private Chat
-          </button>
-          <div id="offline-chat-info" style="display: none">
-            <p id="offline-chat-text"></p>
-            <button class="send-btn" id="start-offline-chat-btn">
-              Start offline chat
+          <div style="display: flex; gap: 8px; width: 100%; margin-top: 8px;">
+            <button class="add-friend-btn" title="Add Friend" style="flex: 1; padding: 8px; font-size: 12px;">
+              <i class="fas fa-user-plus"></i> Add
+            </button>
+            <button id="logout-btn" class="logout-btn" title="Logout" style="flex: 1; padding: 8px; font-size: 12px; background: rgba(239, 68, 68, 0.9);">
+              <i class="fas fa-sign-out-alt"></i> Logout
             </button>
           </div>
         </div>
+
+        <div class="friend-requests" style="border-bottom: 1px solid #e5e7eb;">
+          <h2 style="padding: 12px 16px; margin: 0; font-size: 13px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px;">Requests</h2>
+          <div id="friend-requests-list" style="padding: 8px;"></div>
+        </div>
+
+        <h3 style="padding: 12px 16px; margin: 0; font-size: 13px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;">Online</h3>
+        <div class="chat-list" id="online-friend-list"></div>
+
+        <h3 style="padding: 12px 16px; margin: 0; font-size: 13px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;">Offline</h3>
+        <div class="chat-list" id="offline-friend-list"></div>
+
+        <div style="padding: 12px; border-top: 1px solid #e5e7eb; margin-top: auto;">
+          <button id="switch-to-group-view" style="width: 100%; padding: 10px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px;">
+            <i class="fas fa-door-open"></i> Group Chat
+          </button>
+        </div>
+      </div>
+
+      <!-- Chat Section -->
+      <div class="chat">
+        <div class="chat-header" style="justify-content: space-between;">
+          <h3 id="room-name" style="margin: 0;">Choose a friend to chat</h3>
+          <div style="display: flex; gap: 8px;">
+            <button class="send-btn" id="disconnect-btn" style="display: none; padding: 8px 12px; font-size: 12px;">Disconnect</button>
+            <button class="send-btn" id="request-private-chat-btn" style="display: none; padding: 8px 12px; font-size: 12px;">Request Chat</button>
+          </div>
+        </div>
+
+        <div class="chat-body" id="chat-body"></div>
+
+        <div class="chat-footer">
+          <textarea placeholder="Type a message..." id="message-input" style="display: none;"></textarea>
+          <button class="send-btn" id="send-btn" style="display: none;" title="Send Message">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+
+        <div id="offline-chat-info" style="display: none; padding: 12px 20px; margin-top: 8px;">
+          <div style="padding: 12px 16px; background: #fef3c7; border: 1px solid #f59e0b; border-left: 4px solid #f59e0b; border-radius: 4px;">
+            <p id="offline-chat-text" style="margin: 0 0 10px 0; color: #92400e; font-size: 13px;"></p>
+            <button id="start-offline-chat-btn" style="padding: 6px 12px; background: #f59e0b; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600;">
+              Send Offline Message
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Friend Request Modal -->
+    <div id="friendRequestModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Add Friend</h2>
+        <input type="number" id="modal-add-friend-input" placeholder="Enter User ID" />
+        <button class="send-btn" id="modal-add-friend-btn">Send Request</button>
+        <div id="modal-add-friend-status"></div>
+      </div>
+    </div>
+
+    <!-- Private Chat Request Modal -->
+    <div id="privateChatRequestModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 id="private-chat-request-text"></h2>
+        <button id="accept-private-chat-btn" class="send-btn">Accept</button>
+        <button id="deny-private-chat-btn" class="dis-btn">Deny</button>
       </div>
     </div>
   </body>

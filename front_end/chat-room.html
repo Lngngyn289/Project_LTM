@@ -4,12 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Group Chat</title>
+    <title>Group Chat - Chat Application</title>
     <link rel="stylesheet" href="./css/base.css">
     <link rel="stylesheet" href="./css/chat.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <script src="./js/session-manager.js"></script>
-    <!-- <script src="./js/chat.js" defer></script> -->
 </head>
 
 <script>
@@ -435,69 +434,80 @@
 
 <body>
     <div class="messenger">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <div class="sidebar-header">
-                <h1>Username</h1> <br />
-                <button class="add-friend-btn"><i class="fas fa-user-plus"></i></button>
-                <button id="logout-btn" class="logout-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
-            </div>
-            <div class="room-actions">
-                <!-- Input và nút Tạo Room -->
-                <button id="switch-to-private-chat-view">Switch To Private Chat View</button>
-                <div>
-                    <input type="text" id="create-room-input" placeholder="Enter Room Name">
-                    <button id="create-room-btn">Create Room</button>
-                </div>
-                <!-- Input và nút Join Room -->
-                <div>
-                    <input type="number" id="join-room-input" placeholder="Enter Room ID">
-                    <button id="join-room-btn">Join Room</button>
-                </div>
-            </div>
-            <!-- Danh sách phòng chat -->
-            <div class="chat-list" id="room-list">
-                <!-- Danh sách phòng sẽ được thêm động từ JavaScript -->
-            </div>
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <div class="sidebar-header">
+          <h1>Username</h1>
+          <div style="display: flex; gap: 8px; width: 100%; margin-top: 8px;">
+            <button id="switch-to-private-chat-view" style="flex: 1; padding: 8px; font-size: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+              <i class="fas fa-door-open"></i> Private Chat
+            </button>
+            <button id="logout-btn" class="logout-btn" title="Logout" style="flex: 1; padding: 8px; font-size: 12px; background: rgba(239, 68, 68, 0.9);">
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+          </div>
         </div>
 
-        <!-- Chat Section -->
-        <div class="chat">
-            <div class="chat-header">
-                <h3 id="room-name">Room Name</h3>
-                <div class="add-user">
-                    <div>
-                        <input type="number" id="add-user-input" placeholder="Enter User ID">
-                        <button id="add-user-btn">Add User</button>
-                    </div>
-                    <div>
-                        <input type="number" id="remove-user-input" placeholder="Enter User ID to Remove">
-                        <button id="remove-user-btn">Remove User</button>
-                    </div>
-                    <button id="leave-room-btn">Leave Room</button>
-                    <button id="view-members-btn">View Members</button>
-                </div>
-            </div>
-
-
-            <div class="chat-body" id="chat-body">
-                <!-- Tin nhắn sẽ được thêm động từ JavaScript -->
-            </div>
-            <div class="chat-footer">
-                <textarea placeholder="Type a message..." id="message-input"></textarea>
-                <button class="send-btn" id="send-btn"><i class="fas fa-paper-plane"></i></button>
-            </div>
+        <div style="padding: 12px 16px; border-bottom: 1px solid #e5e7eb;">
+          <h3 style="margin: 0 0 10px 0; font-size: 12px; font-weight: 700; color: #6b7280; text-transform: uppercase;">Create Room</h3>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" id="create-room-input" placeholder="Name" style="flex: 1; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 12px;">
+            <button id="create-room-btn" style="padding: 8px 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">Create</button>
+          </div>
         </div>
+
+        <div style="padding: 12px 16px; border-bottom: 1px solid #e5e7eb;">
+          <h3 style="margin: 0 0 10px 0; font-size: 12px; font-weight: 700; color: #6b7280; text-transform: uppercase;">Join Room</h3>
+          <div style="display: flex; gap: 8px;">
+            <input type="number" id="join-room-input" placeholder="ID" style="flex: 1; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 12px;">
+            <button id="join-room-btn" style="padding: 8px 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">Join</button>
+          </div>
+        </div>
+
+        <h3 style="padding: 12px 16px; margin: 0; font-size: 13px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;">Rooms</h3>
+        <div class="chat-list" id="room-list"></div>
+      </div>
+
+      <!-- Chat Section -->
+      <div class="chat">
+        <div class="chat-header">
+          <h3 id="room-name" style="margin: 0;">Select a room</h3>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+            <div style="display: flex; gap: 8px;">
+              <input type="number" id="add-user-input" placeholder="Add User ID" style="padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 12px;">
+              <button id="add-user-btn" style="padding: 8px 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600;">Add</button>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <input type="number" id="remove-user-input" placeholder="Remove User ID" style="padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 12px;">
+              <button id="remove-user-btn" style="padding: 8px 12px; background: #f59e0b; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600;">Remove</button>
+            </div>
+            <button id="view-members-btn" style="padding: 8px 12px; background: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600;">
+              <i class="fas fa-users"></i> Members
+            </button>
+            <button id="leave-room-btn" style="padding: 8px 12px; background: #ef4444; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600;">
+              <i class="fas fa-sign-out-alt"></i> Leave
+            </button>
+          </div>
+        </div>
+
+        <div class="chat-body" id="chat-body"></div>
+
+        <div class="chat-footer">
+          <textarea placeholder="Type a message..." id="message-input"></textarea>
+          <button class="send-btn" id="send-btn" title="Send Message">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
     </div>
+
+    <!-- Members Modal -->
     <div id="members-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h2>Room Members</h2>
-            <div id="members-list" class="members-list">
-                <!-- Danh sách thành viên sẽ được thêm động qua JavaScript -->
-            </div>
-        </div>
+      <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2>Room Members</h2>
+        <div id="members-list" class="members-list"></div>
+      </div>
     </div>
-</body>
-
+  </body>
 </html>

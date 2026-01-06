@@ -1,5 +1,4 @@
 .header {
-
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -12,7 +11,7 @@
 }
 
 .header-search {
-    background-color: #cd1818;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -64,144 +63,228 @@
 
 
 /* Modal */
-.modal{
+.modal {
     position: fixed;
-    top:0;
+    top: 0;
     right: 0;
     bottom: 0;
     left: 0;
     display: flex;
 }
-.auth-form{
+
+.auth-form {
     margin-top: 30px;
-    border-radius: 5px;
+    border-radius: 10px;
     overflow: hidden;
-    
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
 }
-.auth-form__container{
-    padding: 0 32px;
+
+.auth-form__container {
+    padding: 40px 36px;
 }
-.auth-form__header{
+
+.auth-form__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 30px;
 }
-.authen-form__heading{
-    font-size: 2rem;
-    font-weight: 600;
-    color: #151212;
-}
-.authen-form__switach-btn{
-    font-size: 2rem;
-    font-weight: 600;
-    color:#f6412d;
-    cursor: pointer;
-}
-.auth-form__form{
-    margin-top:16px ;
-}
-.auth-form__input{
-    width: 100%;
-    height: 40px;
-    margin: 5px 0 5px 0;
-    padding: 0 12px;
-    font-size: 1.2rem;
-    border: 1px solid var(--border-color);
-    transition: border 0.3s ease, box-shadow 0.3s ease; /* Thêm hiệu ứng mượt */
-}
-.auth-form__input:focus {
-    outline: none; /* Loại bỏ outline mặc định */
-    border: 1px solid #aaa; /* Viền nhạt hơn */
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Thêm bóng nhẹ */
-}
-.auth-form__aside{
-    margin-top: 18px;
 
+.authen-form__heading {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #2d3748;
 }
-.auth-form__policy-text{
+
+.authen-form__switach-btn {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #667eea;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    text-decoration: none;
+}
+
+.authen-form__switach-btn:hover {
+    color: #764ba2;
+    text-decoration: underline;
+}
+
+.auth-form__form {
+    margin-top: 24px;
+}
+
+.auth-form__group {
+    margin-bottom: 16px;
+}
+
+.auth-form__input {
+    width: 100%;
+    height: 44px;
+    margin: 0;
+    padding: 0 14px;
+    font-size: 1.4rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background-color: #f7fafc;
+    font-family: inherit;
+}
+
+.auth-form__input::placeholder {
+    color: #a0aec0;
+}
+
+.auth-form__input:focus {
+    outline: none;
+    border: 2px solid #667eea;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.auth-form__aside {
+    margin-top: 24px;
+}
+
+.auth-form__policy-text {
     font-size: 1.2rem;
     line-height: 1.8rem;
-    text-align:center;
+    text-align: center;
+    color: #4a5568;
 }
-.auth-form__policy-link{
+
+.auth-form__policy-link {
     text-decoration: none;
-    color: var(--primary-color);
+    color: #667eea;
+    font-weight: 600;
+    transition: color 0.3s ease;
 }
-.container-login{
-    margin-top: 30px;
-    background-color: #e7e2e2;
-    display: flex;
-    height: 550px;
+
+.auth-form__policy-link:hover {
+    color: #764ba2;
 }
-.header-login-wrap{
+
+.container-login {
+    margin-top: 0;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
     display: flex;
-}
-.header-login-wrap span{
-    display: flex;
-    font-size: 2rem;
-    color: var(--text-color);
-    font-weight: 200px;
-    margin-left: 30px;
+    justify-content: center;
     align-items: center;
-    margin-top:0;
-    margin-bottom: 0;
+    min-height: calc(100vh - 140px);
+    padding: 40px 20px;
+}
+
+.modal__body {
+    width: 100%;
+    max-width: 450px;
+    background-color: var(--white-color);
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.header-login-wrap {
+    display: flex;
+    align-items: center;
+    padding: 20px 30px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.header-logo {
+    width: 40px;
+    height: 40px;
+    margin-right: 15px;
+}
+
+.header-login-wrap span {
+    font-size: 2rem;
+    color: white;
+    font-weight: 600;
+    margin: 0;
 }
 
 /* button-style */
-.auth-form__controls{
+.auth-form__controls {
     display: flex;
     justify-content: flex-end;
-    
+    gap: 12px;
+    margin-top: 32px;
 }
-.auth-form__controls-back{
-    margin-right: 8px;
+
+.auth-form__controls-back {
+    margin-right: 0;
 }
-.auth-form__socials{
+
+.auth-form__socials {
     background-color: #fff;
     padding: 12px 36px;
     display: flex;
     justify-content: space-between;
 }
-.btn--size-s{
+
+.btn--size-s {
     height: 32px;
     font-size: 12px;
 }
+
 .auth-form__socials-icon {
     margin-right: 8px;
     font-size: 1.8rem;
 }
-.auth-form__socials-facebook{
+
+.auth-form__socials-facebook {
     color: var(--white-color);
     background-color: #3a5398;
-
 }
 
-.auth-form__socials-google{
+.auth-form__socials-google {
     background-color: var(--white-color);
     color: #666;
 }
-.auth-form__help{
+
+.auth-form__help {
     display: flex;
     justify-content: flex-end;
-
 }
-.auth-form__help-link{
+
+.auth-form__help-link {
     text-decoration: none;
     font-size: 14px;
     color: var(--text-color);
+    transition: color 0.3s ease;
 }
-.auth-form__help-sperate{
+
+.auth-form__help-link:hover {
+    color: #667eea;
+}
+
+.auth-form__help-sperate {
     display: block;
     border-left: 1px solid var(--border-color);
     height: 14px;
     margin: 0 16px;
 }
-.auth-form__help-link-forgot{
-    color: var(--primary-color);   
+
+.auth-form__help-link-forgot {
+    color: #667eea;
 }
-.auth-form__help-link-help{
-    color: #777272
+
+.auth-form__help-link-help {
+    color: #718096;
 }
-.header-login{
-    margin-top: 40px;
+
+.header-login {
+    margin-top: 0;
 }
