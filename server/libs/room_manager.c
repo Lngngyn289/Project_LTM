@@ -173,6 +173,17 @@ int create_room(const char *room_name, int creator_id)
 {
   pthread_mutex_lock(&rooms_mutex);
 
+  // Kiểm tra trùng tên phòng
+  for (int i = 0; i < MAX_ROOMS; i++)
+  {
+    if (rooms[i].id != -1 && strcmp(rooms[i].name, room_name) == 0)
+    {
+      pthread_mutex_unlock(&rooms_mutex);
+      printf("Room with name '%s' already exists.\n", room_name);
+      return -2; // Tên phòng đã tồn tại
+    }
+  }
+
   if (next_room_id < MAX_ROOMS)
   {
     int room_id = next_room_id++;

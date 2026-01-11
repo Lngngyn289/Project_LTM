@@ -304,7 +304,7 @@ void *client_handler(void *socket_desc)
 
       // Tạo room
       int room_id = create_room(room_name, creator_id);
-      if (room_id != -1)
+      if (room_id >= 0)
       {
         // Thêm người tạo vào phòng (join_room)
         if (join_room(room_id, creator_id))
@@ -319,9 +319,16 @@ void *client_handler(void *socket_desc)
                                  strlen("Failed to join room after creation."), 0);
         }
       }
+      else if (room_id == -2)
+      {
+        char error_msg[BUFFER_SIZE];
+        snprintf(error_msg, sizeof(error_msg), "error_duplicate_room_name Room with name '%s' already exists.", room_name);
+        send_websocket_message(client_sock, error_msg, strlen(error_msg), 0);
+      }
       else
       {
-        send_websocket_message(client_sock, "Failed to create room.", strlen("Failed to create room."), 0);
+        send_websocket_message(client_sock, "Failed to create room. Maximum rooms reached.", 
+                               strlen("Failed to create room. Maximum rooms reached."), 0);
       }
       break;
     }

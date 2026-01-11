@@ -1,9 +1,1 @@
-JOIN user1 0
-JOIN test 3
-ADD test2 4
-MESSAGE user1 hello everyone
-MESSAGE test2 hello
-MESSAGE test testt
-REMOVE test 3
-LEAVE test2 4
-ADD test 3
+JOIN vuvanminh 7
